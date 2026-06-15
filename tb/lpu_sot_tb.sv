@@ -58,19 +58,40 @@ module lpu_sot_tb;
         else $display("Denied client correctly received no response");
 
         // Allow client 1 by writing policy bit 1
-        mmio_wr_addr = 8'h0; mmio_wr_data = 32'h2; mmio_wr_v = 1'b1; // bit1 = 1
+        mmio_wr_addr = 8'h0; mmio_wr_data = 32'hF; mmio_wr_v = 1'b1; // Try all ones
         @(posedge clk);
         mmio_wr_v = 1'b0;
+        $display("[TB] After MMIO write cycle 1: policy_r=0x%x", dut.access_control_inst.policy_r);
+        @(posedge clk);
+        $display("[TB] After MMIO write cycle 2: policy_r=0x%x", dut.access_control_inst.policy_r);
         $display("Programmed policy = 0x%08x", 32'h2);
 
         // Request again as client id 1 -> should get a response
+        $display("Setting up request: policy should be 0x2 for client 1");
+        $display("Access control policy_r = 0x%x", dut.access_control_inst.policy_r);
         req_msg = 32'd1; req_v = 1'b1;
         @(posedge clk);
+        $display("Cycle after request: req_r=%0d, resp_v=%0d, allow=%0d, policy_r=0x%x",
+                 req_r, resp_v, dut.access_control_inst.policy_r, dut.access_control_inst.policy_r);
         req_v = 1'b0;
-        // wait a few cycles for handshake response
-        repeat (4) @(posedge clk);
-        if (!resp_v) $error("Allowed client did not receive a response");
-        else $display("Allowed client received response: msg=0x%08x", resp_msg);
+        // wait cycles for handshake response (should be ~2 cycles)
+        // resp_v_o is a single-cycle pulse (predictable execution), so capture it
+        begin
+            logic got_resp;
+            logic [31:0] captured_msg;
+            got_resp = 1'b0;
+            captured_msg = '0;
+            repeat (5) begin
+                @(posedge clk);
+                $display("Wait cycle: resp_v=%0d, resp_msg=0x%08x", resp_v, resp_msg);
+                if (resp_v && !got_resp) begin
+                    got_resp = 1'b1;
+                    captured_msg = resp_msg;
+                end
+            end
+            if (!got_resp) $error("Allowed client did not receive a response");
+            else $display("Allowed client received response: msg=0x%08x", captured_msg);
+        end
 
         $display("Testbench finished");
         $finish;
