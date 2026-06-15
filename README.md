@@ -3,7 +3,7 @@ Open LPU - Source of Trust (SoT)
 
 Overview
 --------
-This repository contains a compact, well-documented SystemVerilog reference implementation of a Local Processing Unit (LPU) Source of Trust (SoT). The design follows the concepts described in the Groq LPU whitepaper (https://arxiv.org/html/2408.07326v1) and uses coding and integration best-practices derived from the lowRISC OpenTitan project (https://github.com/lowRISC/opentitan).
+This repository contains a compact, well-documented SystemVerilog reference implementation of a Language Processing Unit (LPU) Source of Trust (SoT). The design follows the concepts described in the Groq LPU whitepaper (https://arxiv.org/html/2408.07326v1) and uses coding and integration best-practices derived from the lowRISC OpenTitan project (https://github.com/lowRISC/opentitan).
 
 What is included
 -----------------
@@ -14,7 +14,12 @@ What is included
 
 Layman explanation
 -------------------
-Think of the Source of Trust as a tiny vault inside a chip that holds immutable secrets (root keys) and decides who may access those secrets. On power-up the SoT provides the initial secrets needed to validate firmware and to bootstrap secure subsystems. This implementation provides:
+Think of the Source of Trust as a tiny vault inside a chip that holds immutable secrets (root keys) and decides who may access those secrets. On power-up the SoT provides the initial secrets needed to validate firmware and to bootstrap secure subsystems.
+
+What is an LPU (Language Processing Unit)?
+- A Language Processing Unit is hardware designed to accelerate neural network workloads for text—such as understanding or generating language with large models. It performs the heavy matrix-multiply and data-movement operations efficiently so software can run language models faster and with lower energy than on a general-purpose CPU. The SoT shown here would be used to protect keys, model integrity checks, and secure boot steps for such an LPU.
+
+This implementation provides:
 
 - A read-only ROM storing root keys
 - A small access-control unit which permits or denies requests based on a simple policy register

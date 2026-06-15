@@ -1,0 +1,4 @@
+*.sv linguist-language=SystemVerilog
+*.svh linguist-language=SystemVerilog
+*.vhdl linguist-language=VHDL
+
