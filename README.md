@@ -1,9 +1,11 @@
+*I believe the future is in community driven hardware. Who will do Kubernetes for Verilog? Probably not me, but doing my part to enable it.*
+
 Open LPU - Source of Trust (SoT)
 ================================
 
 Overview
 --------
-This repository contains a compact, well-documented SystemVerilog reference implementation of a Language Processing Unit (LPU) Source of Trust (SoT). The design follows the concepts described in the Groq LPU whitepaper (https://arxiv.org/html/2408.07326v1) and uses coding and integration best-practices derived from the lowRISC OpenTitan project (https://github.com/lowRISC/opentitan).
+This repository contains a compact, well-documented SystemVerilog reference implementation of a Language Processing Unit (LPU) Source of Trust (SoT). The design follows the concepts described in the HyperAccel LPU whitepaper (https://arxiv.org/html/2408.07326v1) and uses coding and integration best-practices derived from the lowRISC OpenTitan project (https://github.com/lowRISC/opentitan).
 
 What is included
 -----------------
@@ -30,14 +32,14 @@ LPUs process valuable data (model weights, user prompts, outputs) and must ensur
 
 LPU Design Goals represented in this SoT
 -----------------------------------------
-The Groq LPU whitepaper identifies three core hardware design pillars that enable
+The HyperAccel LPU whitepaper identifies three core hardware design pillars that enable
 real-time inference at scale: low latency, predictable (deterministic) execution,
 and energy/cost efficiency. This SoT implementation embodies each of these
 principles at the RTL level.
 
 ### 1. Low Latency
 
-The Groq architecture eliminates variable-delay memory hierarchies (caches, DRAM
+The HyperAccel architecture eliminates variable-delay memory hierarchies (caches, DRAM
 fetches) in favour of fixed-cycle datapaths. This SoT mirrors that philosophy:
 
 | Path                          | Latency  | RTL Module          | Mechanism                                         |
@@ -57,12 +59,12 @@ Specifically in the code:
 - `handshake_if.sv` — implements a strict two-stage pipeline (`req_pending_1` →
   `req_pending_2` → `resp_v_o`) with no conditional retry or backpressure stalls.
 
-This is directly analogous to the Groq TSP's deterministic instruction scheduling,
+This is directly analogous to the HyperAccel TSP's deterministic instruction scheduling,
 where every operation's completion time is known at compile/design time.
 
 ### 2. Predictable Execution
 
-The Groq whitepaper emphasises that LPU hardware must behave identically on
+The HyperAccel whitepaper emphasises that LPU hardware must behave identically on
 every invocation—no cache misses, no speculative execution, no variable-latency
 memory. The SoT achieves this through:
 
@@ -88,7 +90,7 @@ know, with hardware-guaranteed certainty, exactly when the response will arrive.
 
 ### 3. Energy / Cost Efficiency
 
-The Groq architecture achieves high throughput-per-watt by eliminating
+The HyperAccel architecture achieves high throughput-per-watt by eliminating
 unnecessary hardware complexity. The SoT follows suit:
 
 - **Minimal gate count** — `access_control.sv` is a single register plus a
@@ -132,7 +134,7 @@ This implementation is intentionally small and suitable as a starting reference.
 
 References
 ----------
-- Groq LPU whitepaper: https://arxiv.org/html/2408.07326v1
+- HyperAccel LPU whitepaper: https://arxiv.org/html/2408.07326v1
 - OpenTitan (source of integration best practices): https://github.com/lowRISC/opentitan
 
 Simulation
