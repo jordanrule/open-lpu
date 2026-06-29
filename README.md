@@ -1,5 +1,3 @@
-*I believe the future is in community driven hardware. Who will do Kubernetes for Verilog? Probably not me, but doing my part to enable it.*
-
 Open LPU - Source of Trust (SoT)
 ================================
 
