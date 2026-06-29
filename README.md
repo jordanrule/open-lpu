@@ -14,9 +14,22 @@ What is included
 - `INTEGRATION_NOTE.md` : Notes for integrating this SoT into a larger SoC (for example OpenTitan)
 - `LICENSE` : Apache License 2.0
 
-Layman explanation
--------------------
-Think of the Source of Trust as a tiny vault inside a chip that holds immutable secrets (root keys) and decides who may access those secrets. On power-up the SoT provides the initial secrets needed to validate firmware and to bootstrap secure subsystems.
+Design Intent
+--------------
+This implementation represents a deliberate, iterative step toward a comprehensive LPU Root of Trust (RoT). Rather than presenting a monolithic security architecture, we provide a focused, well-documented Source of Trust as a stable foundation for community-driven evolution.
+
+The SoT establishes three core primitives:
+1. **Immutable key storage** — A read-only root key ROM that remains constant across the device lifetime
+2. **Fine-grained access control** — A policy engine that gates key release to authorized clients  
+3. **Deterministic interface semantics** — Fixed-latency handshakes that enable predictable secure boot sequences
+
+This design is intentionally minimal, allowing stakeholders to:
+- Validate the core trust model in production silicon
+- Gather empirical data on LPU secure-boot patterns and access requirements
+- Propose and integrate additional RoT capabilities (e.g., attestation, secure state management, key derivation) based on real-world deployment feedback
+- Scale the architecture from a single-client SoT to a multi-tenant RoT
+
+Community participation is central to this vision. Feedback from silicon partners, firmware teams, and security researchers will guide the roadmap for evolving this SoT into a full Root of Trust that meets the nuanced security and performance requirements of production LPU deployments.
 
 What is a Language Processing Unit (LPU)?
 ------------------------------------------
